@@ -6,13 +6,12 @@ from datetime import timedelta
 import os
 from dotenv import load_dotenv
 
+# Load environment variables
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
 app = Flask(__name__)
-load_dotenv()
 
 app.permanent_session_lifetime = timedelta(days=365)
-
 app.secret_key = os.getenv("SECRET_KEY")
 
 print("DB Password Loaded:", bool(os.getenv("DB_PASSWORD")))
@@ -28,15 +27,24 @@ db = mysql.connector.connect(
 print("MySQL Database Connected Successfully!")
 
 
+# ============================================================
+# HOME
+# ============================================================
+
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
+# ============================================================
+# LOGIN
+# ============================================================
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+
     if request.method == "POST":
+
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
 
@@ -47,11 +55,13 @@ def login():
                 "SELECT id, name, email, password_hash FROM users WHERE email = %s",
                 (email,)
             )
+
             user = cursor.fetchone()
 
             if user and check_password_hash(user["password_hash"], password):
+
                 session.permanent = True
-                
+
                 session["user_id"] = user["id"]
                 session["user_email"] = user["email"]
                 session["user_name"] = user["name"]
@@ -59,10 +69,13 @@ def login():
                 cursor.execute(
                     "SELECT id FROM students WHERE email = %s LIMIT 1",
                     (email,)
-                    )
+                )
+
                 existing_profile = cursor.fetchone()
+
                 if existing_profile:
                     return redirect("/dashboard")
+
                 else:
                     return redirect("/profile")
 
@@ -70,6 +83,7 @@ def login():
             return redirect("/login")
 
         except mysql.connector.Error:
+
             flash("Unable to log in right now. Please try again.")
             return redirect("/login")
 
@@ -79,24 +93,32 @@ def login():
     return render_template("login.html")
 
 
+# ============================================================
+# REGISTRATION
+# ============================================================
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+
     if request.method == "POST":
+
         name = request.form.get("name", "").strip()
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
         confirm_password = request.form.get("confirm_password", "")
 
         if not name or not email or not password or not confirm_password:
+
             flash("Please fill in all required fields.")
             return redirect("/register")
 
         if len(password) < 8:
+
             flash("Password must be at least 8 characters long.")
             return redirect("/register")
 
         if password != confirm_password:
+
             flash("Passwords do not match.")
             return redirect("/register")
 
@@ -107,9 +129,11 @@ def register():
                 "SELECT id FROM users WHERE email = %s",
                 (email,)
             )
+
             existing_user = cursor.fetchone()
 
             if existing_user:
+
                 flash("An account with this email already exists. Please log in.")
                 return redirect("/login")
 
@@ -124,18 +148,23 @@ def register():
             )
 
             new_user_id = cursor.lastrowid
+
             db.commit()
 
             session.permanent = True
+
             session["user_id"] = new_user_id
             session["user_email"] = email
             session["user_name"] = name
 
             flash("Account created successfully! Please complete your profile.")
+
             return redirect("/profile")
 
         except mysql.connector.Error:
+
             db.rollback()
+
             flash("Unable to create account. Please try again.")
             return redirect("/register")
 
@@ -145,9 +174,13 @@ def register():
     return render_template("register.html")
 
 
+# ============================================================
+# STUDENT DASHBOARD
+# ============================================================
 
 @app.route("/dashboard")
 def dashboard():
+
     if "user_email" not in session:
         return redirect("/login")
 
@@ -165,13 +198,12 @@ def dashboard():
 
         student = cursor.fetchone()
 
-        # Default dashboard values
         profile_completion = 0
         skills_assessed = 0
         placement_activities = 0
 
         if student:
-            # Calculate profile completion
+
             core_fields = [
                 "name",
                 "email",
@@ -210,6 +242,10 @@ def dashboard():
         cursor.close()
 
 
+# ============================================================
+# STUDENT ANALYTICS
+# ============================================================
+
 @app.route("/analytics")
 def analytics():
 
@@ -218,18 +254,21 @@ def analytics():
 
     cursor = db.cursor(dictionary=True)
 
-    cursor.execute("""
-        SELECT name, email, college, degree, academic_year,
-               graduation_year, skills, interests,
-               certifications, projects, career_goal,
-               desired_career
-        FROM students
-        WHERE email = %s
-        LIMIT 1
-    """, (session["user_email"],))
+    try:
+        cursor.execute("""
+            SELECT name, email, college, degree, academic_year,
+                   graduation_year, skills, interests,
+                   certifications, projects, career_goal,
+                   desired_career
+            FROM students
+            WHERE email = %s
+            LIMIT 1
+        """, (session["user_email"],))
 
-    student = cursor.fetchone()
-    cursor.close()
+        student = cursor.fetchone()
+
+    finally:
+        cursor.close()
 
     core_fields = [
         "name",
@@ -269,6 +308,7 @@ def analytics():
         ])
 
     else:
+
         profile_completion = 0
         skill_count = 0
         project_count = 0
@@ -284,21 +324,33 @@ def analytics():
     )
 
 
+# ============================================================
+# MODULE 3 - PLACEMENT READINESS PREDICTION
+# ============================================================
+
 @app.route("/readiness")
 def readiness():
 
+    # Login check
+    if "user_email" not in session:
+        return redirect("/login")
+
     cursor = db.cursor(dictionary=True)
 
-    cursor.execute("""
-        SELECT name, cgpa, skills, projects, certifications,
-               academic_year, desired_career
-        FROM students
-        ORDER BY id DESC
-        LIMIT 1
-    """)
+    try:
+        # Fetch only the logged-in student's information
+        cursor.execute("""
+            SELECT name, cgpa, skills, projects, certifications,
+                   academic_year, desired_career
+            FROM students
+            WHERE email = %s
+            LIMIT 1
+        """, (session["user_email"],))
 
-    student = cursor.fetchone()
-    cursor.close()
+        student = cursor.fetchone()
+
+    finally:
+        cursor.close()
 
     # Default values
     readiness_score = 0
@@ -312,7 +364,9 @@ def readiness():
 
         # Technical Skills - 40 marks
         if student.get("skills"):
+
             skills = student["skills"].strip()
+
             skill_count = len(
                 [s for s in skills.split(",") if s.strip()]
             )
@@ -321,7 +375,9 @@ def readiness():
 
         # Projects - 30 marks
         if student.get("projects"):
+
             projects = student["projects"].strip()
+
             project_count = len(
                 [p for p in projects.split(",") if p.strip()]
             )
@@ -330,7 +386,9 @@ def readiness():
 
         # Certifications - 20 marks
         if student.get("certifications"):
+
             certifications = student["certifications"].strip()
+
             certification_count = len(
                 [c for c in certifications.split(",") if c.strip()]
             )
@@ -341,6 +399,7 @@ def readiness():
 
         # Career Direction - 10 marks
         if student.get("desired_career"):
+
             career_score = 10
 
     # Total Readiness Score
@@ -353,15 +412,19 @@ def readiness():
 
     # Readiness Level
     if readiness_score >= 80:
+
         readiness_level = "Excellent"
 
     elif readiness_score >= 60:
+
         readiness_level = "Good"
 
     elif readiness_score >= 40:
+
         readiness_level = "Moderate"
 
     else:
+
         readiness_level = "Needs Improvement"
 
     return render_template(
@@ -375,6 +438,7 @@ def readiness():
         career_score=career_score
     )
 
+
 # ============================================================
 # MODULE 4 - AI CAREER RECOMMENDATION
 # ============================================================
@@ -382,20 +446,27 @@ def readiness():
 @app.route("/career-recommendation")
 def career_recommendation():
 
+    # Login check
+    if "user_email" not in session:
+        return redirect("/login")
+
     cursor = db.cursor(dictionary=True)
 
-    cursor.execute("""
-        SELECT name, degree, academic_year, cgpa,
-               skills, interests, certifications,
-               projects, career_goal, desired_career
-        FROM students
-        ORDER BY id DESC
-        LIMIT 1
-    """)
+    try:
+        # Fetch only the logged-in student's information
+        cursor.execute("""
+            SELECT name, degree, academic_year, cgpa,
+                   skills, interests, certifications,
+                   projects, career_goal, desired_career
+            FROM students
+            WHERE email = %s
+            LIMIT 1
+        """, (session["user_email"],))
 
-    student = cursor.fetchone()
-    cursor.close()
+        student = cursor.fetchone()
 
+    finally:
+        cursor.close()
 
     # ========================================================
     # CAREER PROFILES
@@ -427,7 +498,6 @@ def career_recommendation():
             ]
         },
 
-
         "Data Scientist": {
 
             "skills": [
@@ -450,7 +520,6 @@ def career_recommendation():
                 "mathematics"
             ]
         },
-
 
         "AI/ML Engineer": {
 
@@ -476,7 +545,6 @@ def career_recommendation():
             ]
         },
 
-
         "Software Developer": {
 
             "skills": [
@@ -501,7 +569,6 @@ def career_recommendation():
             ]
         },
 
-
         "Web Developer": {
 
             "skills": [
@@ -525,7 +592,6 @@ def career_recommendation():
                 "technology"
             ]
         },
-
 
         "Cyber Security Analyst": {
 
@@ -552,7 +618,6 @@ def career_recommendation():
                 "technology"
             ]
         },
-
 
         "Cloud & DevOps Engineer": {
 
@@ -581,7 +646,6 @@ def career_recommendation():
             ]
         },
 
-
         "Database Administrator / Data Engineer": {
 
             "skills": [
@@ -609,9 +673,7 @@ def career_recommendation():
 
     }
 
-
     recommendations = []
-
 
     # ========================================================
     # NO STUDENT PROFILE
@@ -624,7 +686,6 @@ def career_recommendation():
             student=None,
             recommendations=[]
         )
-
 
     # ========================================================
     # PREPARE STUDENT SKILLS
@@ -640,7 +701,6 @@ def career_recommendation():
             if skill.strip()
         }
 
-
     # ========================================================
     # PREPARE STUDENT INTERESTS
     # ========================================================
@@ -655,7 +715,6 @@ def career_recommendation():
             if interest.strip()
         }
 
-
     # ========================================================
     # CALCULATE CAREER MATCH
     # ========================================================
@@ -663,35 +722,24 @@ def career_recommendation():
     for career, profile in career_profiles.items():
 
         career_skills = set(profile["skills"])
-
         career_interests = set(profile["interests"])
 
-
         # Matching skills
-
         matching_skills = (
             student_skills.intersection(career_skills)
         )
 
-
         # Matching interests
-
         matching_interests = (
             student_interests.intersection(career_interests)
         )
 
-
         # Missing skills
-
         missing_skills = (
             career_skills - student_skills
         )
 
-
-        # ----------------------------------------------------
-        # SKILL SCORE - 70%
-        # ----------------------------------------------------
-
+        # Skill Score - 70%
         if career_skills:
 
             skill_score = (
@@ -703,11 +751,7 @@ def career_recommendation():
 
             skill_score = 0
 
-
-        # ----------------------------------------------------
-        # INTEREST SCORE - 30%
-        # ----------------------------------------------------
-
+        # Interest Score - 30%
         if career_interests:
 
             interest_score = (
@@ -719,39 +763,27 @@ def career_recommendation():
 
             interest_score = 0
 
-
-        # Final match score
-
+        # Final Match Score
         match_score = round(
             skill_score + interest_score
         )
 
-
-        # ====================================================
-        # LOW INFORMATION STUDENT
-        # ====================================================
-
+        # Low Information Student
         total_information = (
             len(student_skills)
             + len(student_interests)
         )
 
-
         if total_information == 0:
 
             status = "Explore"
-
             match_score = None
 
         else:
 
             status = "Match"
 
-
-        # ====================================================
-        # ADD RECOMMENDATION
-        # ====================================================
-
+        # Add Recommendation
         recommendations.append({
 
             "career": career,
@@ -774,35 +806,28 @@ def career_recommendation():
 
         })
 
-
     # ========================================================
     # SORT CAREERS
     # ========================================================
 
     recommendations.sort(
-
         key=lambda x:
             x["score"]
             if x["score"] is not None
             else -1,
-
         reverse=True
     )
-
 
     # ========================================================
     # SEND DATA TO HTML
     # ========================================================
 
     return render_template(
-
         "career_recommendation.html",
-
         student=student,
-
         recommendations=recommendations
-
     )
+
 
 # ============================================================
 # LOGOUT
@@ -810,20 +835,30 @@ def career_recommendation():
 
 @app.route("/logout")
 def logout():
+
     session.clear()
+
     return redirect("/login")
 
 
+# ============================================================
+# STUDENT PROFILE MANAGEMENT
+# ============================================================
+
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
+
     if "user_email" not in session:
         return redirect("/login")
 
     email = session["user_email"]
+
     cursor = db.cursor(dictionary=True)
 
     try:
+
         if request.method == "POST":
+
             name = request.form.get("name", "").strip()
             college = request.form.get("college", "").strip() or None
             degree = request.form.get("degree", "").strip() or None
@@ -841,9 +876,11 @@ def profile():
                 "SELECT id FROM students WHERE email = %s LIMIT 1",
                 (email,)
             )
+
             existing = cursor.fetchone()
 
             if existing:
+
                 cursor.execute("""
                     UPDATE students
                     SET name=%s, college=%s, degree=%s,
@@ -852,12 +889,15 @@ def profile():
                         projects=%s, career_goal=%s, desired_career=%s
                     WHERE id=%s
                 """, (
-                    name, college, degree, academic_year,
-                    graduation_year, cgpa, skills, interests,
-                    certifications, projects, career_goal,
-                    desired_career, existing["id"]
+                    name, college, degree,
+                    academic_year, graduation_year, cgpa,
+                    skills, interests, certifications,
+                    projects, career_goal, desired_career,
+                    existing["id"]
                 ))
+
             else:
+
                 cursor.execute("""
                     INSERT INTO students (
                         name, email, college, degree, academic_year,
@@ -866,48 +906,64 @@ def profile():
                     )
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """, (
-                    name, email, college, degree, academic_year,
-                    graduation_year, cgpa, skills, interests,
-                    certifications, projects, career_goal, desired_career
+                    name, email, college, degree,
+                    academic_year, graduation_year, cgpa,
+                    skills, interests, certifications,
+                    projects, career_goal, desired_career
                 ))
 
             db.commit()
+
             flash("Profile saved successfully!")
+
             return redirect("/dashboard")
 
         cursor.execute(
             "SELECT * FROM students WHERE email = %s LIMIT 1",
             (email,)
         )
+
         student = cursor.fetchone()
 
         return render_template("profile.html", student=student)
 
     except mysql.connector.Error:
+
         db.rollback()
+
         flash("Unable to save or load your profile. Please try again.")
+
         return redirect("/dashboard")
 
     finally:
         cursor.close()
 
 
+# ============================================================
+# VIEW STUDENT PROFILE
+# ============================================================
+
 @app.route("/view-profile")
 def view_profile():
+
     if "user_email" not in session:
         return redirect("/login")
 
     cursor = db.cursor(dictionary=True)
 
     try:
+
         cursor.execute(
             "SELECT * FROM students WHERE email = %s LIMIT 1",
             (session["user_email"],)
         )
+
         student = cursor.fetchone()
 
         if not student:
+
             flash("Please complete your profile first.")
+
             return redirect("/profile")
 
         return render_template("view_profile.html", student=student)
@@ -916,13 +972,22 @@ def view_profile():
         cursor.close()
 
 
+# ============================================================
+# MODULE 5 - RESUME INTELLIGENCE (INTERFACE)
+# ============================================================
+
 @app.route("/resume-intelligence")
 def resume_intelligence():
+
     if "user_email" not in session:
         return redirect("/login")
 
     return render_template("resume_intelligence.html")
 
+
+# ============================================================
+# RUN APPLICATION
+# ============================================================
 
 if __name__ == "__main__":
     app.run(debug=True)
