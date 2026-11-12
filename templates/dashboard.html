@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Dashboard | CareerIQ</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Arial, sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        color: #ffffff;
+        background:
+          radial-gradient(
+            circle at 75% 15%,
+            rgba(0, 191, 255, 0.16),
+            transparent 28%
+          ),
+          radial-gradient(
+            circle at 15% 85%,
+            rgba(91, 76, 255, 0.15),
+            transparent 30%
+          ),
+          linear-gradient(135deg, #050b18 0%, #081225 45%, #0b1024 100%);
+        overflow-x: hidden;
+      }
+
+      /* Subtle AI background grid */
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.18;
+        background-image:
+          linear-gradient(rgba(90, 190, 255, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(90, 190, 255, 0.08) 1px, transparent 1px);
+        background-size: 45px 45px;
+        mask-image: linear-gradient(to bottom, black, transparent 90%);
+      }
+
+      /* SIDEBAR */
+
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 250px;
+        height: 100vh;
+        padding: 30px 20px;
+        background: rgba(4, 10, 23, 0.78);
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(20px);
+        z-index: 10;
+      }
+
+      .logo {
+        font-size: 27px;
+        font-weight: 700;
+        letter-spacing: -1px;
+        margin: 0 15px 45px;
+      }
+
+      .logo span {
+        color: #45d7ff;
+      }
+
+      .nav-title {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.8px;
+        color: #66748e;
+        margin: 0 15px 15px;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        text-decoration: none;
+        color: #aeb9cc;
+        padding: 13px 15px;
+        margin: 5px 0;
+        border-radius: 12px;
+        font-size: 14px;
+        transition: 0.3s ease;
+      }
+
+      .nav-link:hover {
+        color: #ffffff;
+        background: rgba(64, 194, 255, 0.09);
+        transform: translateX(3px);
+      }
+
+      .nav-link.active {
+        color: #ffffff;
+        background: linear-gradient(
+          90deg,
+          rgba(40, 190, 255, 0.2),
+          rgba(72, 101, 255, 0.08)
+        );
+        border: 1px solid rgba(70, 207, 255, 0.12);
+        box-shadow: 0 8px 25px rgba(0, 160, 255, 0.08);
+      }
+
+      .nav-icon {
+        width: 28px;
+        text-align: center;
+        font-size: 17px;
+      }
+
+      .logout {
+        position: absolute;
+        bottom: 30px;
+        left: 20px;
+        right: 20px;
+      }
+
+      /* MAIN */
+
+      .main {
+        margin-left: 250px;
+        min-height: 100vh;
+        padding: 34px 45px 55px;
+      }
+
+      /* TOP BAR */
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 38px;
+      }
+
+      .welcome-small {
+        color: #71809a;
+        font-size: 13px;
+        margin-bottom: 8px;
+        letter-spacing: 0.3px;
+      }
+
+      .heading {
+        font-size: 31px;
+        font-weight: 650;
+        letter-spacing: -0.8px;
+      }
+
+      .heading span {
+        color: #45d7ff;
+      }
+
+      .subtitle {
+        margin-top: 8px;
+        color: #7f8da5;
+        font-size: 14px;
+      }
+
+      .profile {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 9px 15px 9px 10px;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        background: rgba(255, 255, 255, 0.035);
+        border-radius: 40px;
+        backdrop-filter: blur(15px);
+      }
+
+      .profile-menu {
+        position: relative;
+      }
+
+      button.profile {
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+        text-align: left;
+      }
+
+      .profile-arrow {
+        color: #8290a7;
+        font-size: 18px;
+        margin-left: 4px;
+      }
+
+      .profile-dropdown {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        width: 190px;
+        padding: 7px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 13px;
+        background: #101b30;
+        box-shadow: 0 14px 35px rgba(0, 0, 0, 0.35);
+        z-index: 30;
+      }
+
+      .profile-dropdown[hidden] {
+        display: none;
+      }
+
+      .profile-dropdown a {
+        display: block;
+        padding: 12px;
+        color: #dce7f8;
+        text-decoration: none;
+        font-size: 13px;
+        border-radius: 8px;
+      }
+
+      .profile-dropdown a:hover {
+        background: rgba(69, 215, 255, 0.1);
+        color: #45d7ff;
+      }
+
+      .profile-icon {
+        width: 39px;
+        height: 39px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1cb9ff, #5965ff);
+        font-size: 17px;
+        font-weight: bold;
+      }
+
+      .profile-text strong {
+        display: block;
+        font-size: 13px;
+      }
+
+      .profile-text small {
+        color: #71809a;
+        font-size: 11px;
+      }
+
+      /* STATS */
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin-bottom: 42px;
+      }
+
+      .stat-card {
+        position: relative;
+        padding: 23px 25px;
+        border-radius: 18px;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.065),
+          rgba(255, 255, 255, 0.025)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(15px);
+        overflow: hidden;
+        transition: 0.3s ease;
+      }
+
+      .stat-card::after {
+        content: "";
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        right: -45px;
+        top: -45px;
+        background: rgba(50, 201, 255, 0.12);
+        filter: blur(30px);
+        border-radius: 50%;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(67, 210, 255, 0.22);
+      }
+
+      .stat-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .stat-label {
+        color: #8290a7;
+        font-size: 12px;
+      }
+
+      .stat-icon {
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: rgba(51, 199, 255, 0.09);
+        color: #46d8ff;
+        font-size: 17px;
+      }
+
+      .stat-number {
+        margin-top: 13px;
+        font-size: 27px;
+        font-weight: 650;
+      }
+
+      .stat-info {
+        margin-top: 4px;
+        font-size: 11px;
+        color: #63718a;
+      }
+
+      /* SECTION HEADING */
+
+      .section-header {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        margin-bottom: 22px;
+      }
+
+      .section-header h2 {
+        font-size: 21px;
+        font-weight: 600;
+      }
+
+      .section-header p {
+        color: #68768f;
+        font-size: 12px;
+        margin-top: 6px;
+      }
+
+      .module-count {
+        color: #45d7ff;
+        font-size: 12px;
+      }
+
+      /* MODULE GRID */
+
+      .modules {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 19px;
+      }
+
+      .module-card {
+        position: relative;
+        min-height: 245px;
+        padding: 26px;
+        border-radius: 20px;
+        background: linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.075),
+          rgba(255, 255, 255, 0.025)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.085);
+        backdrop-filter: blur(18px);
+        overflow: hidden;
+        transition: all 0.35s ease;
+      }
+
+      .module-card::before {
+        content: "";
+        position: absolute;
+        width: 170px;
+        height: 170px;
+        right: -80px;
+        bottom: -90px;
+        border-radius: 50%;
+        background: rgba(44, 194, 255, 0.08);
+        filter: blur(15px);
+      }
+
+      .module-card:hover {
+        transform: translateY(-7px);
+        border-color: rgba(62, 211, 255, 0.28);
+        box-shadow:
+          0 18px 45px rgba(0, 0, 0, 0.25),
+          0 0 25px rgba(0, 178, 255, 0.06);
+      }
+
+      .module-number {
+        position: absolute;
+        top: 22px;
+        right: 24px;
+        font-size: 11px;
+        color: #4d5c74;
+        letter-spacing: 1px;
+      }
+
+      .module-icon {
+        width: 51px;
+        height: 51px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 15px;
+        background: linear-gradient(
+          135deg,
+          rgba(49, 205, 255, 0.16),
+          rgba(92, 87, 255, 0.13)
+        );
+        border: 1px solid rgba(83, 207, 255, 0.13);
+        color: #50d9ff;
+        font-size: 23px;
+        margin-bottom: 22px;
+      }
+
+      .module-card h3 {
+        font-size: 17px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #f2f6ff;
+      }
+
+      .module-card p {
+        color: #7f8da5;
+        font-size: 12px;
+        line-height: 1.7;
+        max-width: 285px;
+      }
+
+      .module-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 20px;
+        color: #45d7ff;
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.25s ease;
+      }
+
+      .module-link:hover {
+        gap: 10px;
+        color: #ffffff;
+      }
+
+      /* BOTTOM INSIGHT */
+
+      .insight {
+        margin-top: 27px;
+        padding: 21px 25px;
+        border-radius: 17px;
+        border: 1px solid rgba(68, 204, 255, 0.11);
+        background: linear-gradient(
+          100deg,
+          rgba(25, 185, 255, 0.08),
+          rgba(88, 82, 255, 0.05)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .insight-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .insight-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(65, 209, 255, 0.11);
+        color: #45d7ff;
+        font-size: 19px;
+      }
+
+      .insight h4 {
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+
+      .insight p {
+        color: #71809a;
+        font-size: 11px;
+      }
+
+      .insight-btn {
+        text-decoration: none;
+        color: #06101f;
+        background: #4bd7ff;
+        padding: 10px 17px;
+        border-radius: 9px;
+        font-size: 11px;
+        font-weight: 700;
+        transition: 0.25s ease;
+      }
+
+      .insight-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(50, 205, 255, 0.25);
+      }
+
+      /* RESPONSIVE */
+
+      @media (max-width: 1100px) {
+        .modules {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .stats {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      @media (max-width: 800px) {
+        .sidebar {
+          width: 210px;
+        }
+
+        .main {
+          margin-left: 210px;
+          padding: 28px;
+        }
+
+        .modules {
+          grid-template-columns: 1fr;
+        }
+
+        .stats {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .sidebar {
+          position: relative;
+          width: 100%;
+          height: auto;
+          border-right: none;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logout {
+          position: relative;
+          left: 0;
+          bottom: 0;
+          margin-top: 20px;
+        }
+
+        .main {
+          margin-left: 0;
+          padding: 25px 18px;
+        }
+
+        .topbar {
+          align-items: flex-start;
+          gap: 20px;
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- SIDEBAR -->
+
+    {% include '_sidebar.html' %}
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main">
+      <!-- TOP BAR -->
+
+      <div class="topbar">
+        <div>
+          <div class="welcome-small">YOUR PERSONALIZED CAREER INTELLIGENCE</div>
+
+          <h1 class="heading">
+            Welcome, <span>{{ student.name if student else 'student' }}</span>👋
+          </h1>
+
+          <p class="subtitle">
+            Build your skills. Prepare smarter. Shape your career.
+          </p>
+        </div>
+
+        <div class="profile-menu">
+          <button
+            type="button"
+            class="profile"
+            id="profileMenuButton"
+            aria-expanded="false"
+            aria-controls="profileDropdown"
+          >
+            <div class="profile-icon">
+              {{ (session.get('user_name') or (student.name if student else
+              'S'))[0]|upper }}
+            </div>
+
+            <div class="profile-text">
+              <strong
+                >{{ session.get('user_name') or (student.name if student else
+                'Student') }}</strong
+              >
+              <small>Career Explorer</small>
+            </div>
+
+            <span class="profile-arrow">⌄</span>
+          </button>
+
+          <div class="profile-dropdown" id="profileDropdown" hidden>
+            <a href="/view-profile">View Profile</a>
+            <a href="/profile">Edit Profile</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- STAT CARDS -->
+
+      <section class="stats">
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-label">CAREER PROFILE</div>
+
+            <div class="stat-icon">◉</div>
+          </div>
+
+          <div class="stat-number">{{ profile_completion }}%</div>
+
+          <div class="stat-info">Complete your profile to unlock insights</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-label">SKILLS ASSESSED</div>
+
+            <div class="stat-icon">✦</div>
+          </div>
+
+          <div class="stat-number">{{ skills_assessed }}</div>
+
+          <div class="stat-info">Skills analyzed by CareerIQ</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-label">PLACEMENT ACTIVITIES</div>
+
+            <div class="stat-icon">↗</div>
+          </div>
+
+          <div class="stat-number">{{ placement_activities }}</div>
+
+          <div class="stat-info">
+            Start preparing for your placement journey
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE SECTION -->
+
+      <div class="section-header">
+        <div>
+          <h2>CareerIQ Intelligence Modules</h2>
+
+          <p>
+            Explore intelligent tools designed for your complete career journey.
+          </p>
+        </div>
+
+        <div class="module-count">06 MODULES</div>
+      </div>
+
+      <!-- SIX MODULES -->
+
+      <section class="modules">
+        <!-- MODULE 1 -->
+
+        <div class="module-card">
+          <div class="module-number">01</div>
+
+          <div class="module-icon">◉</div>
+
+          <h3>Student Profile & Management</h3>
+
+          <p>
+            Create and manage your academic profile, skills, interests,
+            achievements and career preferences in one place.
+          </p>
+
+          <a href="/profile" class="module-link"> Manage Profile → </a>
+        </div>
+
+        <!-- MODULE 2 -->
+
+        <div class="module-card">
+          <div class="module-number">02</div>
+
+          <div class="module-icon">▦</div>
+
+          <h3>Student Analytics Dashboard</h3>
+
+          <p>
+            Understand your academic and skill performance through meaningful
+            analytics, visualizations and progress insights.
+          </p>
+
+          <a href="/analytics" class="module-link"> View Analytics → </a>
+        </div>
+
+        <!-- MODULE 3 -->
+
+        <div class="module-card">
+          <div class="module-number">03</div>
+
+          <div class="module-icon">✦</div>
+
+          <h3>AI Career Recommendation</h3>
+
+          <p>
+            Discover suitable career paths based on your skills, interests,
+            academic profile and performance.
+          </p>
+
+          <a href="/career-recommendation" class="module-link">
+            Explore Careers →
+          </a>
+        </div>
+
+        <!-- MODULE 4 -->
+
+        <div class="module-card">
+          <div class="module-number">04</div>
+
+          <div class="module-icon">◈</div>
+
+          <h3>Placement Readiness Prediction</h3>
+
+          <p>
+            Analyze your preparation level and receive an intelligent
+            placement-readiness score with improvement areas.
+          </p>
+
+          <a href="/readiness" class="module-link"> Check Readiness → </a>
+        </div>
+
+        <!-- MODULE 5 -->
+
+        <div class="module-card">
+          <div class="module-number">05</div>
+
+          <div class="module-icon">▤</div>
+
+          <h3>Resume Intelligence – Builder + Analyzer</h3>
+
+          <p>
+            Build a professional resume inside CareerIQ or upload an existing
+            resume to receive intelligent improvement suggestions.
+          </p>
+
+          <a href="/resume-intelligence" class="module-link">
+            Open Resume Tools →
+          </a>
+        </div>
+
+        <!-- MODULE 6 -->
+
+        <div class="module-card">
+          <div class="module-number">06</div>
+
+          <div class="module-icon">◉</div>
+
+          <h3>AI Interview Preparation</h3>
+
+          <p>
+            Practice interview questions, improve your responses and prepare for
+            technical, HR and placement interviews.
+          </p>
+
+          <a href="#" class="module-link"> Start Preparation → </a>
+        </div>
+      </section>
+
+      <!-- BOTTOM INSIGHT -->
+
+      <div class="insight">
+        <div class="insight-left">
+          <div class="insight-icon">✦</div>
+
+          <div>
+            <h4>Your Career Journey Starts Here</h4>
+
+            <p>
+              Complete your student profile first to unlock personalized
+              CareerIQ insights.
+            </p>
+          </div>
+        </div>
+
+        <a href="#" class="insight-btn"> Get Started → </a>
+      </div>
+    </main>
+
+    <script>
+      const profileButton = document.getElementById("profileMenuButton");
+      const profileDropdown = document.getElementById("profileDropdown");
+
+      profileButton.addEventListener("click", function () {
+        const isExpanded =
+          profileButton.getAttribute("aria-expanded") === "true";
+
+        profileButton.setAttribute("aria-expanded", String(!isExpanded));
+        profileDropdown.hidden = isExpanded;
+      });
+
+      document.addEventListener("click", function (event) {
+        if (!event.target.closest(".profile-menu")) {
+          profileDropdown.hidden = true;
+          profileButton.setAttribute("aria-expanded", "false");
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CareerIQ | AI Career & Placement Intelligence</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            color: white;
+            background:
+                linear-gradient(rgba(5, 10, 25, 0.78), rgba(5, 10, 25, 0.88)),
+                url("https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=2000&q=80");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* NAVBAR */
+
+        nav {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            background: rgba(5, 10, 25, 0.35);
+            backdrop-filter: blur(12px);
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: #66d9ff;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 38px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #66d9ff;
+        }
+
+        .login-btn {
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 10px 22px;
+            border-radius: 25px;
+        }
+
+        .login-btn:hover {
+            background: white;
+            color: #07101f !important;
+        }
+
+        /* HERO */
+
+        .hero {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            padding: 60px 7%;
+        }
+
+        .hero-content {
+            max-width: 720px;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 8px 16px;
+            border: 1px solid rgba(102,217,255,0.5);
+            border-radius: 30px;
+            color: #66d9ff;
+            background: rgba(102,217,255,0.08);
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 64px;
+            line-height: 1.08;
+            margin-bottom: 22px;
+        }
+
+        h1 span {
+            color: #66d9ff;
+        }
+
+        .description {
+            color: #d7dce5;
+            font-size: 18px;
+            line-height: 1.7;
+            max-width: 650px;
+            margin-bottom: 35px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .primary-btn {
+            text-decoration: none;
+            color: #06101d;
+            background: #66d9ff;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102,217,255,0.3);
+        }
+
+        .secondary-btn {
+            text-decoration: none;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.35);
+            padding: 14px 28px;
+            border-radius: 30px;
+            transition: 0.3s;
+        }
+
+        .secondary-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* SMALL STATS */
+
+        .stats {
+            display: flex;
+            gap: 45px;
+            margin-top: 55px;
+        }
+
+        .stat h3 {
+            font-size: 25px;
+            color: white;
+        }
+
+        .stat p {
+            font-size: 13px;
+            color: #aeb8c7;
+            margin-top: 5px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            nav {
+                padding: 0 5%;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+            }
+
+            h1 {
+                font-size: 42px;
+            }
+
+            .description {
+                font-size: 16px;
+            }
+
+            .stats {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+
+        <div class="logo">
+            Career<span>IQ</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="#about">About</a>
+            <a href="/login" class="login-btn">Login</a>
+        </div>
+
+    </nav>
+
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="tag">
+                ✦ AI-Powered Career Intelligence
+            </div>
+
+            <h1>
+                Build Your Career<br>
+                With <span>Intelligence.</span>
+            </h1>
+
+            <p class="description">
+                CareerIQ helps students understand their skills, discover
+                suitable career paths, prepare for placements and make
+                smarter career decisions using AI and data-driven insights.
+            </p>
+
+            <div class="buttons">
+
+                <a href="/login" class="primary-btn">
+                    Get Started →
+                </a>
+
+                <a href="#about" class="secondary-btn">
+                    Explore CareerIQ
+                </a>
+
+            </div>
+
+
+            <div class="stats">
+
+                <div class="stat">
+                    <h3>AI</h3>
+                    <p>Powered Insights</p>
+                </div>
+
+                <div class="stat">
+                    <h3>6+</h3>
+                    <p>Career Modules</p>
+                </div>
+
+                <div class="stat">
+                    <h3>24/7</h3>
+                    <p>Career Guidance</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Analytics | CareerIQ</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background:
+                radial-gradient(
+                    circle at 80% 10%,
+                    rgba(52, 190, 255, 0.14),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #06172f,
+                    #0a3155,
+                    #06172f
+                );
+
+            color: white;
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           MAIN LAYOUT
+           ========================= */
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+           ========================= */
+
+        .main {
+    flex: 1;
+    min-width: 0;
+    margin-left: 250px;
+    padding: 42px;
+    overflow-x: hidden;
+}
+
+
+        .top-heading {
+            margin-bottom: 30px;
+        }
+
+
+        .top-heading h1 {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+
+        .top-heading h1 span {
+            color: #55e8ff;
+        }
+
+
+        .top-heading p {
+            color: #c4d7e8;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           SUMMARY CARDS
+           ========================= */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+
+        .summary-card {
+            background: rgba(255, 255, 255, 0.09);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 20px;
+            padding: 23px;
+            backdrop-filter: blur(15px);
+            min-height: 145px;
+        }
+
+
+        .summary-card h3 {
+            font-size: 13px;
+            color: #c7d9e8;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+
+        .summary-value {
+            font-size: 31px;
+            font-weight: bold;
+            color: #55e8ff;
+            margin-bottom: 8px;
+        }
+
+
+        .summary-card p {
+            color: #b8ccdc;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           SECTION TITLE
+           ========================= */
+
+        .section-title {
+            font-size: 23px;
+            margin: 30px 0 18px;
+        }
+
+
+        /* =========================
+           ANALYTICS GRID
+           ========================= */
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+
+        .analytics-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(15px);
+        }
+
+
+        .analytics-card h2 {
+            font-size: 19px;
+            margin-bottom: 10px;
+        }
+
+
+        .analytics-card > p {
+            color: #c5d7e7;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+
+        /* =========================
+           PROFILE COMPLETION
+           ========================= */
+
+        .completion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+
+        .completion-header span {
+            color: #d8e8f5;
+            font-size: 14px;
+        }
+
+
+        .completion-header strong {
+            color: #55e8ff;
+            font-size: 20px;
+        }
+
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.10);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                #36cfe9,
+                #55e8ff
+            );
+            border-radius: 20px;
+        }
+
+
+        /* =========================
+           SKILLS
+           ========================= */
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+
+        .skill-tag {
+            padding: 9px 14px;
+            background: rgba(82, 232, 255, 0.12);
+            border: 1px solid rgba(82, 232, 255, 0.25);
+            border-radius: 20px;
+            color: #bff5ff;
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           INFORMATION ROW
+           ========================= */
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+
+        .info-label {
+            color: #b9cede;
+            font-size: 13px;
+        }
+
+
+        .info-value {
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: right;
+            max-width: 55%;
+            word-break: break-word;
+        }
+
+
+        /* =========================
+           INSIGHTS
+           ========================= */
+
+        .insight {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 15px;
+            border-radius: 13px;
+            margin-bottom: 12px;
+            color: #d5e5f0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+
+        .insight strong {
+            color: #55e8ff;
+        }
+
+
+        /* =========================
+           EMPTY STATE
+           ========================= */
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #c5d7e7;
+        }
+
+
+        .empty-state h2 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+
+        /* =========================
+           BACK BUTTON
+           ========================= */
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 13px 22px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            background: rgba(82, 232, 255, 0.14);
+            border: 1px solid rgba(82, 232, 255, 0.30);
+            transition: 0.3s;
+        }
+
+
+        .back-btn:hover {
+            background: rgba(82, 232, 255, 0.24);
+        }
+
+
+        /* =========================
+           RESPONSIVE
+           ========================= */
+
+        @media (max-width: 1100px) {
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 850px) {
+
+    .main {
+        margin-left: 210px;
+        padding: 25px;
+    }
+
+    .analytics-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+        @media (max-width: 600px) {
+
+    .main {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .top-heading h1 {
+        font-size: 30px;
+    }
+
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="layout">
+
+
+    <!-- =========================
+         COMMON SIDEBAR
+         ========================= -->
+
+    {% include "_sidebar.html" %}
+
+
+    <!-- =========================
+         MAIN CONTENT
+         ========================= -->
+
+    <main class="main">
+
+
+        <div class="top-heading">
+
+            <h1>
+                Student <span>Analytics</span>
+            </h1>
+
+            <p>
+                Track your profile, skills and career direction through
+                meaningful data-driven insights.
+            </p>
+
+        </div>
+
+
+        {% if student %}
+
+
+        <!-- =========================
+             SUMMARY
+             ========================= -->
+
+        <div class="summary-grid">
+
+
+            <div class="summary-card">
+
+                <h3>
+                    Career Profile
+                </h3>
+
+                <div class="summary-value">
+                    {{ profile_completion }}%
+                </div>
+
+                <p>
+                    Overall completion of your core CareerIQ profile.
+                </p>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <h3>
+                    Academic Year
+                </h3>
+
+                <div class="summary-value">
+
+                    {% if student.academic_year %}
+                        {{ student.academic_year }}
+                    {% else %}
+                        —
+                    {% endif %}
+
+                </div>
+
+                <p>
+                    Your current academic stage.
+                </p>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <h3>
+                    Technical Skills
+                </h3>
+
+                <div class="summary-value">
+                    {{ skill_count }}
+                </div>
+
+                <p>
+                    Skills currently available for career analysis.
+                </p>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <h3>
+                    Career Direction
+                </h3>
+
+                <div class="summary-value">
+
+                    {% if student.desired_career %}
+                        ✓
+                    {% else %}
+                        —
+                    {% endif %}
+
+                </div>
+
+                <p>
+
+                    {% if student.desired_career %}
+                        Career preference recorded.
+                    {% else %}
+                        Career direction not selected yet.
+                    {% endif %}
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =========================
+             PROFILE ANALYTICS
+             ========================= -->
+
+        <h2 class="section-title">
+            Profile Analytics
+        </h2>
+
+
+        <div class="analytics-grid">
+
+
+            <!-- PROFILE COMPLETION -->
+
+            <div class="analytics-card">
+
+                <h2>
+                    Profile Completion
+                </h2>
+
+                <p>
+                    A complete profile helps CareerIQ generate more
+                    meaningful career and placement insights.
+                </p>
+
+
+                <div class="completion-header">
+
+                    <span>
+                        Completion Level
+                    </span>
+
+                    <strong>
+                        {{ profile_completion }}%
+                    </strong>
+
+                </div>
+
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        style="width: {{ profile_completion }}%;">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACADEMIC PROFILE -->
+
+            <div class="analytics-card">
+
+                <h2>
+                    Academic Profile
+                </h2>
+
+                <p>
+                    Your academic information helps CareerIQ understand
+                    your current stage and personalize future guidance.
+                </p>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Academic Year
+                    </span>
+
+                    <span class="info-value">
+
+                        {% if student.academic_year %}
+                            {{ student.academic_year }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Degree
+                    </span>
+
+                    <span class="info-value">
+
+                        {% if student.degree %}
+                            {{ student.degree }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Graduation Year
+                    </span>
+
+                    <span class="info-value">
+
+                        {% if student.graduation_year %}
+                            {{ student.graduation_year }}
+                        {% else %}
+                            Not provided
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- SKILL PORTFOLIO -->
+
+            <div class="analytics-card">
+
+                <h2>
+                    Technical Skill Portfolio
+                </h2>
+
+                <p>
+                    These skills have been added to your CareerIQ profile
+                    and can be used by future career recommendation modules.
+                </p>
+
+
+                {% if student.skills %}
+
+                    <div class="skill-list">
+
+                        {% for skill in student.skills.split(',') %}
+
+                            {% if skill.strip() %}
+
+                                <div class="skill-tag">
+                                    {{ skill.strip() }}
+                                </div>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="empty-state">
+                        No technical skills added yet.
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- CAREER DIRECTION -->
+
+            <div class="analytics-card">
+
+                <h2>
+                    Career Direction
+                </h2>
+
+                <p>
+                    Your selected career direction will help CareerIQ
+                    personalize recommendations and preparation.
+                </p>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Preferred Career
+                    </span>
+
+                    <span class="info-value">
+
+                        {% if student.desired_career %}
+                            {{ student.desired_career }}
+                        {% else %}
+                            Not selected
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Career Goal
+                    </span>
+
+                    <span class="info-value">
+
+                        {% if student.career_goal == "known" %}
+
+                            Goal identified
+
+                        {% elif student.career_goal == "confused" %}
+
+                            Needs career guidance
+
+                        {% else %}
+
+                            Not provided
+
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- EXPERIENCE SNAPSHOT -->
+
+            <div class="analytics-card">
+
+                <h2>
+                    Experience Snapshot
+                </h2>
+
+                <p>
+                    A quick overview of your practical learning
+                    and professional development activities.
+                </p>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Projects
+                    </span>
+
+                    <span class="info-value">
+                        {{ project_count }}
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Certifications
+                    </span>
+
+                    <span class="info-value">
+                        {{ certification_count }}
+                    </span>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Interests
+                    </span>
+
+                    <span class="info-value">
+
+                        {% if student.interests %}
+                            Added
+                        {% else %}
+                            Not provided
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- CAREER INSIGHTS -->
+
+            <div class="analytics-card">
+
+                <h2>
+                    Career Insights
+                </h2>
+
+                <p>
+                    CareerIQ uses your current profile information
+                    to identify useful areas for future analysis.
+                </p>
+
+
+                <div class="insight">
+
+                    📊
+                    <strong>Profile:</strong>
+
+                    Your profile is currently
+                    {{ profile_completion }}% complete.
+
+                </div>
+
+
+                <div class="insight">
+
+                    💻
+                    <strong>Skills:</strong>
+
+                    You currently have
+                    {{ skill_count }}
+                    technical skill{% if skill_count != 1 %}s{% endif %}
+                    recorded.
+
+                </div>
+
+
+                <div class="insight">
+
+                    🚀
+                    <strong>Practical Experience:</strong>
+
+                    You have
+                    {{ project_count }}
+                    project{% if project_count != 1 %}s{% endif %}
+                    recorded in your profile.
+
+                </div>
+
+
+                {% if student.desired_career %}
+
+                    <div class="insight">
+
+                        🎯
+                        <strong>Career Direction:</strong>
+
+                        Your selected direction is
+                        {{ student.desired_career }}.
+
+                    </div>
+
+                {% else %}
+
+                    <div class="insight">
+
+                        💡
+                        <strong>Next Step:</strong>
+
+                        Explore suitable career paths through
+                        the AI Career Recommendation module.
+
+                    </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- =========================
+             NO PROFILE
+             ========================= -->
+
+        <div class="analytics-card">
+
+            <div class="empty-state">
+
+                <h2>
+                    No Student Profile Found
+                </h2>
+
+                <p style="margin-top: 12px;">
+
+                    Please complete your Student Profile first
+                    to generate personalized analytics.
+
+                </p>
+
+                <a href="/profile" class="back-btn">
+                    Complete Profile →
+                </a>
+
+            </div>
+
+        </div>
+
+
+        {% endif %}
+
+
+        <a href="/dashboard" class="back-btn">
+            ← Back to Dashboard
+        </a>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

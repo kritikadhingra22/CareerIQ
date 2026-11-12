@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Placement Readiness | CareerIQ</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #071b3a, #0b3761, #071b3a);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 250px;
+            background: rgba(3, 12, 30, 0.95);
+            padding: 28px 18px;
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 55px;
+            padding-left: 15px;
+        }
+
+        .logo span {
+            color: #52e8ff;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #d7e7f5;
+            padding: 15px 15px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .sidebar a:hover {
+            background: rgba(62, 211, 255, 0.12);
+            color: #55e8ff;
+        }
+
+        .sidebar .active {
+            background: rgba(62, 211, 255, 0.18);
+            color: #55e8ff;
+        }
+
+        /* MAIN */
+
+        .main {
+    flex: 1;
+    min-width: 0;
+    margin-left: 250px;
+    padding: 45px;
+}
+
+        .top-heading {
+            margin-bottom: 35px;
+        }
+
+        .top-heading h1 {
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
+
+        .top-heading h1 span {
+            color: #55e8ff;
+        }
+
+        .top-heading p {
+            color: #c4d7e8;
+            font-size: 15px;
+        }
+
+        /* SCORE CARD */
+
+        .readiness-card {
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 22px;
+            padding: 35px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(15px);
+        }
+
+        .score-section {
+            display: flex;
+            align-items: center;
+            gap: 45px;
+        }
+
+        .score-circle {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            border: 12px solid rgba(82, 232, 255, 0.25);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .score-circle strong {
+            font-size: 42px;
+            color: #55e8ff;
+        }
+
+        .score-circle small {
+            color: #c7d9e8;
+        }
+
+        .score-content h2 {
+            font-size: 26px;
+            margin-bottom: 12px;
+        }
+
+        .score-content p {
+            color: #c7d9e8;
+            line-height: 1.7;
+            max-width: 650px;
+        }
+
+        /* ANALYSIS CARDS */
+
+        .section-title {
+            margin: 30px 0 18px;
+            font-size: 22px;
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .analysis-card {
+            background: rgba(255, 255, 255, 0.09);
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 18px;
+            padding: 25px;
+        }
+
+        .analysis-card h3 {
+            margin-bottom: 12px;
+            color: #55e8ff;
+        }
+
+        .analysis-card p {
+            color: #c7d9e8;
+            line-height: 1.6;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 13px 22px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            background: rgba(82, 232, 255, 0.16);
+            border: 1px solid rgba(82, 232, 255, 0.35);
+        }
+
+        .back-btn:hover {
+            background: rgba(82, 232, 255, 0.25);
+        }
+
+                /* READINESS BREAKDOWN */
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin-bottom: 10px;
+        }
+
+        .breakdown-card {
+            background: rgba(255, 255, 255, 0.09);
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 18px;
+            padding: 22px;
+        }
+
+        .breakdown-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .breakdown-info span {
+            color: #d7e7f5;
+            font-size: 14px;
+        }
+
+        .breakdown-info strong {
+            color: #55e8ff;
+            font-size: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.10);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #55e8ff;
+            border-radius: 20px;
+            transition: width 0.5s ease;
+        }
+
+        @media (max-width: 800px) {
+
+    .main {
+        margin-left: 210px;
+        padding: 25px;
+    }
+
+    .analysis-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .breakdown-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .main {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+}
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+
+        {% include "_sidebar.html" %}
+
+
+        <!-- MAIN CONTENT -->
+
+        <main class="main">
+
+            <div class="top-heading">
+
+                <h1>
+                    Placement <span>Readiness</span>
+                </h1>
+
+                <p>
+                    Evaluate your preparation level and identify areas
+                    that can improve your placement readiness.
+                </p>
+
+            </div>
+
+
+            <!-- READINESS SCORE -->
+
+            <div class="readiness-card">
+
+                <div class="score-section">
+
+                    <div class="score-circle">
+
+                        <strong>{{ readiness_score }}%</strong>
+
+                        <small>{{ readiness_level }}</small>
+
+                    </div>
+
+
+                    <div class="score-content">
+
+                        <h2>
+                            Placement Readiness Score
+                        </h2>
+
+                        <p>
+                            CareerIQ will analyze your academic profile,
+                            technical skills, projects, certifications
+                            and career preparation to generate your
+                            personalized placement-readiness score.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- READINESS BREAKDOWN -->
+
+<h2 class="section-title">
+    Readiness Breakdown
+</h2>
+
+<div class="breakdown-grid">
+
+    <div class="breakdown-card">
+        <div class="breakdown-info">
+            <span>Technical Skills</span>
+            <strong>{{ skills_score }}/40</strong>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill"
+                 style="width: {{ (skills_score / 40) * 100 }}%;">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="breakdown-card">
+        <div class="breakdown-info">
+            <span>Projects</span>
+            <strong>{{ projects_score }}/30</strong>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill"
+                 style="width: {{ (projects_score / 30) * 100 }}%;">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="breakdown-card">
+        <div class="breakdown-info">
+            <span>Certifications</span>
+            <strong>{{ certifications_score }}/20</strong>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill"
+                 style="width: {{ (certifications_score / 20) * 100 }}%;">
+            </div>
+        </div>
+    </div>
+
+    <div class="breakdown-card">
+        <div class="breakdown-info">
+            <span>Career Direction</span>
+            <strong>{{ career_score }}/10</strong>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill"
+                 style="width: {{ (career_score / 10) * 100 }}%;">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ANALYSIS AREAS -->
+            <h2 class="section-title">
+                Readiness Analysis
+            </h2>
+
+
+            <div class="analysis-grid">
+
+                <div class="analysis-card">
+
+    <h3>
+        Technical Skills
+    </h3>
+
+    <p>
+        {% if student and student.skills %}
+
+            You have provided technical skills in your profile.
+            CareerIQ will consider them while evaluating your
+            placement readiness.
+
+        {% else %}
+
+            You haven't added any technical skills yet.
+            Start by learning foundational skills such as
+            Python, SQL, Excel or programming fundamentals.
+
+        {% endif %}
+    </p>
+
+</div>
+
+
+                <div class="analysis-card">
+
+    <h3>
+        Projects
+    </h3>
+
+    <p>
+        {% if student and student.projects and student.skills %}
+
+            Great! You have both technical skills and project
+            experience. Keep building advanced projects and
+            strengthen your portfolio with real-world applications.
+
+        {% elif student and student.projects %}
+
+            You have added project experience to your profile.
+            CareerIQ will consider your practical experience
+            while evaluating your placement readiness.
+
+        {% elif student and student.skills %}
+
+            No projects have been added yet.
+            Start building practical projects to apply your
+            skills and gain hands-on experience.
+
+        {% else %}
+
+            You haven't added any projects yet.
+            After learning the basics, build small practical
+            projects to develop hands-on experience.
+
+        {% endif %}
+    </p>
+
+</div>
+
+
+                <div class="analysis-card">
+
+    <h3>
+        Certifications
+    </h3>
+
+    <p>
+        {% if student and student.certifications %}
+
+            You have added certifications to your profile.
+            Relevant certifications can strengthen your
+            knowledge and overall placement preparation.
+
+        {% elif student and (student.skills or student.projects) %}
+
+            You haven't added any certifications yet.
+            Consider earning relevant certifications to
+            strengthen your knowledge and profile.
+
+        {% else %}
+
+            You haven't added any certifications yet.
+            Focus on building foundational skills first,
+            then consider relevant certifications as you
+            progress.
+
+        {% endif %}
+    </p>
+
+</div>
+
+
+                <div class="analysis-card">
+
+    <h3>
+        Improvement Areas
+    </h3>
+
+    <p>
+
+        {% if not student %}
+
+            Complete your student profile to receive
+            personalized improvement suggestions.
+
+        {% else %}
+
+            {% if not student.skills %}
+                • Build foundational technical skills.<br>
+            {% endif %}
+
+            {% if not student.projects %}
+                • Build practical projects to gain hands-on experience.<br>
+            {% endif %}
+
+            {% if not student.certifications %}
+                • Consider relevant certifications as you
+                progress in your career.<br>
+            {% endif %}
+
+            {% if not student.desired_career %}
+                • Explore suitable career paths and choose
+                a career direction.
+            {% endif %}
+
+            {% if student.skills and student.projects and
+                  student.certifications and
+                  student.desired_career %}
+
+                Your profile covers the major placement-readiness
+                areas. Focus on strengthening your existing
+                skills, building advanced projects and preparing
+                for real-world interviews.
+
+            {% endif %}
+
+        {% endif %}
+
+    </p>
+
+</div>
+
+
+            <a href="/dashboard" class="back-btn">
+                ← Back to Dashboard
+            </a>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

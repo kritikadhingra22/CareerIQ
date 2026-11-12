@@ -1,0 +1,348 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Intelligence | CareerIQ</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            color: #ffffff;
+            background:
+                radial-gradient(circle at 80% 10%, rgba(0,191,255,.14), transparent 30%),
+                radial-gradient(circle at 10% 90%, rgba(91,76,255,.14), transparent 30%),
+                linear-gradient(135deg, #050b18, #081225 50%, #0b1024);
+        }
+
+        .page {
+            max-width: 1250px;
+            margin: auto;
+            padding: 35px 30px 55px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 55px;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 27px;
+            font-weight: 750;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: #45d7ff;
+        }
+
+        .back-link {
+            color: #b9c8df;
+            text-decoration: none;
+            padding: 11px 17px;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 10px;
+            background: rgba(255,255,255,.04);
+            font-size: 13px;
+        }
+
+        .back-link:hover {
+            color: #45d7ff;
+            border-color: rgba(69,215,255,.4);
+        }
+
+        .hero {
+            text-align: center;
+            max-width: 760px;
+            margin: 0 auto 48px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            color: #45d7ff;
+            background: rgba(69,215,255,.08);
+            border: 1px solid rgba(69,215,255,.17);
+            padding: 8px 13px;
+            border-radius: 30px;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: clamp(30px, 5vw, 46px);
+            line-height: 1.2;
+            letter-spacing: -1.2px;
+        }
+
+        h1 span {
+            color: #45d7ff;
+        }
+
+        .hero p {
+            color: #91a0b8;
+            line-height: 1.8;
+            font-size: 14px;
+            margin-top: 17px;
+        }
+
+        .tools {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+            max-width: 970px;
+            margin: auto;
+        }
+
+        .tool-card {
+            position: relative;
+            padding: 32px;
+            min-height: 350px;
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 22px;
+            background: linear-gradient(
+                145deg,
+                rgba(255,255,255,.075),
+                rgba(255,255,255,.025)
+            );
+            box-shadow: 0 18px 45px rgba(0,0,0,.15);
+            transition: .3s ease;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(69,215,255,.3);
+            box-shadow: 0 20px 45px rgba(0,0,0,.25);
+        }
+
+        .tool-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 62px;
+            height: 62px;
+            border-radius: 17px;
+            color: #45d7ff;
+            font-size: 28px;
+            background: linear-gradient(
+                135deg,
+                rgba(49,205,255,.17),
+                rgba(92,87,255,.16)
+            );
+            border: 1px solid rgba(83,207,255,.15);
+            margin-bottom: 25px;
+        }
+
+        .tag {
+            color: #45d7ff;
+            font-size: 10px;
+            letter-spacing: 1.3px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 23px;
+            margin-bottom: 13px;
+        }
+
+        .description {
+            color: #91a0b8;
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 22px;
+        }
+
+        .features {
+            list-style: none;
+            display: grid;
+            gap: 12px;
+            margin-bottom: 27px;
+        }
+
+        .features li {
+            color: #c5d0e2;
+            font-size: 12px;
+        }
+
+        .features li::before {
+            content: "✓";
+            color: #45d7ff;
+            margin-right: 10px;
+        }
+
+        .tool-button {
+            display: inline-block;
+            padding: 12px 17px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            background: #45d7ff;
+            color: #06101f;
+            transition: .25s ease;
+        }
+
+        .tool-button:hover {
+            background: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .tool-button.secondary {
+            color: #d9e7f9;
+            background: rgba(255,255,255,.055);
+            border: 1px solid rgba(255,255,255,.14);
+        }
+
+        .tool-button.secondary:hover {
+            color: #45d7ff;
+            background: rgba(69,215,255,.08);
+        }
+
+        .note {
+            max-width: 970px;
+            margin: 28px auto 0;
+            padding: 20px 23px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            border: 1px solid rgba(69,215,255,.12);
+            border-radius: 15px;
+            background: rgba(69,215,255,.045);
+        }
+
+        .note-icon {
+            color: #45d7ff;
+            font-size: 20px;
+        }
+
+        .note h3 {
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .note p {
+            color: #8291aa;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 700px) {
+            .page {
+                padding: 24px 17px 35px;
+            }
+
+            .topbar {
+                margin-bottom: 40px;
+            }
+
+            .tools {
+                grid-template-columns: 1fr;
+            }
+
+            .tool-card {
+                padding: 25px;
+            }
+
+            .logo {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+
+        <header class="topbar">
+            <div class="logo">Career<span>IQ</span></div>
+            <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+        </header>
+
+        <section class="hero">
+            <div class="eyebrow">MODULE 05 · RESUME INTELLIGENCE</div>
+
+            <h1>Your Resume.<br><span>Your Next Opportunity.</span></h1>
+
+            <p>
+                Create a professional resume or analyze your existing one.
+                Improve how you present your skills, projects and achievements
+                with CareerIQ.
+            </p>
+        </section>
+
+        <section class="tools">
+
+            <article class="tool-card">
+                <div class="tool-icon">✎</div>
+                <div class="tag">CREATE YOUR RESUME</div>
+
+                <h2>Resume Builder</h2>
+
+                <p class="description">
+                    Build a professional resume using your academic background,
+                    technical skills, projects and certifications.
+                </p>
+
+                <ul class="features">
+                    <li>Enter your professional details</li>
+                    <li>Preview your resume before downloading</li>
+                    <li>Generate a PDF resume</li>
+                </ul>
+
+                <a href="/resume-builder" class="tool-button">
+                    Build My Resume →
+                </a>
+            </article>
+
+            <article class="tool-card">
+                <div class="tool-icon">⌕</div>
+                <div class="tag">IMPROVE YOUR RESUME</div>
+
+                <h2>Resume Analyzer</h2>
+
+                <p class="description">
+                    Upload your existing PDF resume and review its content
+                    for important sections, skills and possible improvements.
+                </p>
+
+                <ul class="features">
+                    <li>Upload an existing PDF resume</li>
+                    <li>Check important resume sections</li>
+                    <li>Receive rule-based improvement suggestions</li>
+                </ul>
+
+                <a href="/resume-analyzer" class="tool-button secondary">
+                    Analyze My Resume →
+                </a>
+            </article>
+
+        </section>
+
+        <section class="note">
+            <div class="note-icon">✦</div>
+            <div>
+                <h3>Make every application count</h3>
+                <p>
+                    A clear resume helps recruiters understand your experience
+                    and strengths. Review your details carefully before applying
+                    for an opportunity.
+                </p>
+            </div>
+        </section>
+
+    </main>
+</body>
+</html>

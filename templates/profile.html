@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Profile | CareerIQ</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.20), transparent 30%),
+                radial-gradient(circle at 85% 80%, rgba(168, 85, 247, 0.18), transparent 30%),
+                #090d1a;
+            color: #ffffff;
+        }
+
+        .layout {
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 260px;
+            padding: 28px 18px;
+            background: rgba(15, 20, 38, 0.82);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 35px;
+            padding-left: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .logo span {
+            color: #8b7cff;
+        }
+
+        .menu-title {
+            font-size: 11px;
+            color: #7f879d;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            padding: 0 12px;
+            margin-bottom: 12px;
+        }
+
+        .menu a {
+            display: block;
+            text-decoration: none;
+            color: #aeb5c7;
+            padding: 13px 14px;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .menu a:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: #ffffff;
+        }
+
+        .menu a.active {
+            background: rgba(99, 102, 241, 0.18);
+            color: #ffffff;
+            border: 1px solid rgba(139, 124, 255, 0.25);
+        }
+
+        .logout {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 20px;
+        }
+
+        /* MAIN */
+
+        .main {
+    margin-left: 250px;
+    min-height: 100vh;
+    padding: 34px 45px 55px;
+    overflow-y: auto;
+}
+
+        .top-section {
+            margin-bottom: 28px;
+        }
+
+        .top-section h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .top-section p {
+            color: #8f97aa;
+            font-size: 14px;
+        }
+
+        /* FORM CARD */
+
+        .form-card {
+            max-width: 1050px;
+            background: rgba(20, 25, 45, 0.78);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 30px;
+            backdrop-filter: blur(18px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        }
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .section-subtitle {
+            color: #858da2;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 13px;
+            color: #c6ccda;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.09);
+            background: rgba(8, 12, 25, 0.75);
+            color: #ffffff;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #8b7cff;
+            box-shadow: 0 0 0 3px rgba(139,124,255,0.10);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #60687b;
+        }
+
+        select option {
+            background: #11162a;
+            color: white;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .help-text {
+            color: #70798e;
+            font-size: 11px;
+            margin-top: 6px;
+        }
+
+        /* RADIO */
+
+        .radio-group {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .radio-option input {
+            display: none;
+        }
+
+        .radio-option label {
+            display: block;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 11px;
+            background: rgba(8, 12, 25, 0.65);
+            cursor: pointer;
+            color: #aeb5c7;
+            transition: 0.2s;
+        }
+
+        .radio-option input:checked + label {
+            border-color: #8b7cff;
+            background: rgba(99,102,241,0.15);
+            color: #ffffff;
+        }
+
+        /* BUTTON */
+
+        .button-area {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .save-btn {
+            border: none;
+            padding: 14px 28px;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #6d5dfc, #9b6cff);
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(109,93,252,0.25);
+            transition: 0.2s;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(109,93,252,0.35);
+        }
+
+        @media (max-width: 850px) {
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                padding: 25px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .main {
+                padding: 20px;
+            }
+        }
+        /* SUCCESS POPUP */
+
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 6, 18, 0.65);
+    backdrop-filter: blur(7px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 9999;
+
+    animation: popupFade 0.25s ease;
+}
+
+.success-popup {
+    width: 430px;
+    padding: 32px;
+
+    background: rgba(20, 26, 48, 0.96);
+    border: 1px solid rgba(139, 124, 255, 0.30);
+
+    border-radius: 20px;
+
+    text-align: center;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.50),
+        0 0 35px rgba(109, 93, 252, 0.12);
+
+    animation: popupSlide 0.3s ease;
+}
+
+.success-icon {
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 18px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(34, 197, 94, 0.14);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+
+    color: #72e6a1;
+
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.success-popup h2 {
+    font-size: 21px;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.success-popup p {
+    color: #929bb0;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 26px;
+}
+
+.popup-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.edit-btn,
+.continue-btn {
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.edit-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #cbd1df;
+}
+
+.edit-btn:hover {
+    background: rgba(255,255,255,0.10);
+    color: #ffffff;
+}
+
+.continue-btn {
+    border: none;
+    background: linear-gradient(135deg, #6d5dfc, #9b6cff);
+    color: white;
+    box-shadow: 0 7px 20px rgba(109,93,252,0.25);
+}
+
+.continue-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(109,93,252,0.35);
+}
+
+@keyframes popupFade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes popupSlide {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+    </style>
+</head>
+
+<body>
+
+<body>
+
+{% if saved %}
+
+<div class="popup-overlay" id="successPopup">
+
+    <div class="success-popup">
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <h2>Profile Saved Successfully!</h2>
+
+        <p>
+            Your profile information has been successfully saved
+            to CareerIQ.
+        </p>
+
+        <div class="popup-buttons">
+
+            <button
+                type="button"
+                class="edit-btn"
+                onclick="closePopup()"
+            >
+                Edit Profile
+            </button>
+
+            <button
+                type="button"
+                class="continue-btn"
+                onclick="continueToDashboard()"
+            >
+                OK, Continue →
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+
+    {% include '_sidebar.html' %}
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main">
+
+        <div class="top-section">
+
+            <h1>Student Profile</h1>
+
+            <p>
+                Build your CareerIQ profile so we can understand your
+                academic background, skills and career interests.
+            </p>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <div class="form-card">
+
+            <form method="POST">
+
+                <!-- BASIC INFORMATION -->
+
+                <div class="section">
+
+                    <h2 class="section-title">
+                        Basic Information
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Tell us about yourself.
+                    </p>
+
+
+                    <div class="form-grid">
+
+                        <div class="field">
+
+                            <label for="name">
+                                Full Name *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="Enter your full name"
+                                value="{{ student.name if student else session.get('user_name', '') }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="email">
+                                Email Address *
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="example@gmail.com"
+                                value="{{ student.email if student else session.get('user_email', '') }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="field full">
+
+                            <label for="college">
+                                College / University
+                            </label>
+
+                            <input
+                                type="text"
+                                id="college"
+                                name="college"
+                                placeholder="Enter your college or university"
+                                value="{{ student.college if student else '' }}"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="degree">
+                                Degree
+                            </label>
+
+                            <input
+                                type="text"
+                                id="degree"
+                                name="degree"
+                                placeholder="e.g. B.Tech CSE"
+                                value="{{ student.degree if student else '' }}"
+                            >
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="academic_year">
+                                Current Academic Year
+                            </label>
+
+                            <select
+                                id="academic_year"
+                                name="academic_year"
+                            >
+
+                                <option value="">Select academic year</option>
+<option value="1st Year" {% if student and student.academic_year == '1st Year' %}selected{% endif %}>1st Year</option>
+<option value="2nd Year" {% if student and student.academic_year == '2nd Year' %}selected{% endif %}>2nd Year</option>
+<option value="3rd Year" {% if student and student.academic_year == '3rd Year' %}selected{% endif %}>3rd Year</option>
+<option value="4th Year" {% if student and student.academic_year == '4th Year' %}selected{% endif %}>4th Year</option>
+<option value="Graduated" {% if student and student.academic_year == 'Graduated' %}selected{% endif %}>Graduated</option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="graduation_year">
+                                Graduation Year
+                            </label>
+
+                            <input
+                                type="number"
+                                id="graduation_year"
+                                name="graduation_year"
+                                placeholder="e.g. 2028"
+                                value="{{ student.graduation_year if student else '' }}"
+                            >
+
+                            <div class="help-text">
+                                Enter the year in which you graduated or expect to graduate.
+                            </div>
+
+                        </div>
+
+
+                        <div class="field">
+
+                            <label for="cgpa">
+                                CGPA
+                            </label>
+
+                            <input
+                                type="number"
+                                id="cgpa"
+                                name="cgpa"
+                                step="0.01"
+                                min="0"
+                                max="10"
+                                placeholder="e.g. 8.25"
+                                value="{{ student.cgpa if student and student.cgpa is not none else '' }}"
+                            >
+
+                            <div class="help-text">
+                                Leave blank if CGPA is not available yet.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SKILLS & EXPERIENCE -->
+
+                <div class="section">
+
+                    <h2 class="section-title">
+                        Skills & Experience
+                    </h2>
+
+                    <p class="section-subtitle">
+                        This information will help CareerIQ understand your current profile.
+                    </p>
+
+
+                    <div class="form-grid">
+
+                        <div class="field full">
+
+                            <label for="skills">
+                                Technical Skills
+                            </label>
+
+                            <textarea
+    id="skills"
+    name="skills"
+    placeholder="e.g. Python, Pandas, SQL, Excel, Java"
+>{{ student.skills if student and student.skills else '' }}</textarea>
+
+                        </div>
+
+
+                        <div class="field full">
+
+                            <label for="interests">
+                                Interests
+                            </label>
+
+                            <textarea id="interests" name="interests" placeholder="e.g. Data Analysis, AI/ML, Web Development">{{ student.interests if student and student.interests else '' }}</textarea>
+
+                        </div>
+
+
+                        <div class="field full">
+
+                            <label for="certifications">
+                                Certifications
+                            </label>
+
+                            <textarea id="certifications" name="certifications" placeholder="e.g. Python Certificate, IBM Data Analytics">{{ student.certifications if student and student.certifications else '' }}</textarea>
+
+                            <div class="help-text">
+                                Optional
+                            </div>
+
+                        </div>
+
+
+                        <div class="field full">
+
+                            <label for="projects">
+                                Projects
+                            </label>
+
+                            <textarea id="projects" name="projects" placeholder="Tell us about your projects...">{{ student.projects if student and student.projects else '' }}</textarea>
+
+                            <div class="help-text">
+                                Optional
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CAREER DIRECTION -->
+
+                <div class="section">
+
+                    <h2 class="section-title">
+                        Career Direction
+                    </h2>
+
+                    <p class="section-subtitle">
+                        Tell CareerIQ whether you already know your career direction.
+                    </p>
+
+
+                    <div class="radio-group">
+
+                        <div class="radio-option">
+
+                            <input
+                                type="radio"
+                                id="goal-known"
+                                name="career_goal"
+                                value="known"
+                                {% if student and student.career_goal == 'known' %}checked{% endif %}
+                            >
+
+                            <label for="goal-known">
+                                I know my career goal 🎯
+                            </label>
+
+                        </div>
+
+
+                        <div class="radio-option">
+
+                            <input
+                                type="radio"
+                                id="goal-confused"
+                                name="career_goal"
+                                value="confused"
+                                {% if student and student.career_goal == 'confused' %}checked{% endif %}
+                            >
+
+                            <label for="goal-confused">
+                                I'm confused — help me choose 🤔
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DESIRED CAREER -->
+
+                <div class="section">
+
+                    <div class="form-grid">
+
+                        <div class="field full">
+
+                            <label for="desired_career">
+                                Desired Career / Role
+                            </label>
+
+                            <input
+                                type="text"
+                                id="desired_career"
+                                name="desired_career"
+                                placeholder="e.g. Data Analyst, Software Developer, AI Engineer"
+                                value="{{ student.desired_career if student else '' }}"
+                            >
+
+                            <div class="help-text">
+                                Leave blank if you are confused about your career direction.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SAVE -->
+
+                <div class="button-area">
+
+                    <button
+                        type="submit"
+                        class="save-btn"
+                    >
+                        Save Profile →
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+
+function closePopup() {
+
+    const popup = document.getElementById("successPopup");
+
+    if (popup) {
+        popup.remove();
+    }
+
+}
+
+
+function continueToDashboard() {
+
+    window.location.href = "/dashboard";
+
+}
+
+</script>
+</body>
+</html>

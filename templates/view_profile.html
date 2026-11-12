@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Profile | CareerIQ</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #e8eefb;
+            background: linear-gradient(135deg, #081323, #142440);
+        }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .subtitle {
+            color: #aab8cf;
+            margin: 0;
+        }
+
+        .card {
+            padding: 28px;
+            border: 1px solid rgba(255,255,255,.12);
+            border-radius: 18px;
+            background: rgba(255,255,255,.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,.2);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .field {
+            min-width: 0;
+            padding-bottom: 13px;
+            border-bottom: 1px solid rgba(255,255,255,.09);
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        .label {
+            display: block;
+            margin-bottom: 8px;
+            color: #8fa4c4;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .value {
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            line-height: 1.6;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 11px 17px;
+            border: 1px solid rgba(69,215,255,.35);
+            border-radius: 10px;
+            color: #45d7ff;
+            text-decoration: none;
+            background: rgba(69,215,255,.08);
+        }
+
+        .button:hover {
+            background: rgba(69,215,255,.16);
+        }
+
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .field.full {
+                grid-column: auto;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+        <div class="top">
+            <div>
+                <h1>Student Profile</h1>
+                <p class="subtitle">Your saved CareerIQ information</p>
+            </div>
+
+            <a class="button" href="/dashboard">← Back to Dashboard</a>
+        </div>
+
+        <section class="card">
+            <div class="grid">
+                <div class="field">
+                    <span class="label">Full Name</span>
+                    <div class="value">{{ student.name or 'Not provided' }}</div>
+                </div>
+
+                <div class="field">
+                    <span class="label">Email</span>
+                    <div class="value">{{ student.email or 'Not provided' }}</div>
+                </div>
+
+                <div class="field">
+                    <span class="label">College</span>
+                    <div class="value">{{ student.college or 'Not provided' }}</div>
+                </div>
+
+                <div class="field">
+                    <span class="label">Degree</span>
+                    <div class="value">{{ student.degree or 'Not provided' }}</div>
+                </div>
+
+                <div class="field">
+                    <span class="label">Academic Year</span>
+                    <div class="value">{{ student.academic_year or 'Not provided' }}</div>
+                </div>
+
+                <div class="field">
+                    <span class="label">Graduation Year</span>
+                    <div class="value">{{ student.graduation_year or 'Not provided' }}</div>
+                </div>
+
+                <div class="field">
+                    <span class="label">CGPA</span>
+                    <div class="value">{{ student.cgpa or 'Not provided' }}</div>
+                </div>
+
+                <div class="field">
+                    <span class="label">Career Goal</span>
+                    <div class="value">{{ student.career_goal or 'Not provided' }}</div>
+                </div>
+
+                <div class="field full">
+                    <span class="label">Skills</span>
+                    <div class="value">{{ student.skills or 'Not provided' }}</div>
+                </div>
+
+                <div class="field full">
+                    <span class="label">Interests</span>
+                    <div class="value">{{ student.interests or 'Not provided' }}</div>
+                </div>
+
+                <div class="field full">
+                    <span class="label">Certifications</span>
+                    <div class="value">{{ student.certifications or 'Not provided' }}</div>
+                </div>
+
+                <div class="field full">
+                    <span class="label">Projects</span>
+                    <div class="value">{{ student.projects or 'Not provided' }}</div>
+                </div>
+
+                <div class="field full">
+                    <span class="label">Desired Career</span>
+                    <div class="value">{{ student.desired_career or 'Not provided' }}</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 28px;">
+                <a class="button" href="/profile">Edit Profile →</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
